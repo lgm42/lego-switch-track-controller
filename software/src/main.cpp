@@ -3,6 +3,7 @@
 
 #include "ConfigurationProvider.h"
 #include "WiFiManager.h"
+#include "PoweredUpController.h"
 
 #define NTP_SERVERS "0.fr.pool.ntp.org", "time.nist.gov", "pool.ntp.org"
 #define UTC_OFFSET  +1
@@ -38,12 +39,15 @@ void setup()
 
   ArduinoOTA.begin();
 
+  PoweredUpLego.setup();
+
   Serial.println("setup finished.");
 }
 
 void loop() 
 {
   ArduinoOTA.handle();
+  PoweredUpLego.handle();
   digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
   delay(1000);                       // wait for a second
   digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
