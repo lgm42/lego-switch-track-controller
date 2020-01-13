@@ -52,7 +52,7 @@ void PoweredUpController::setup()
     _myHub.init(); // initalize the listening hub
 
     _timer = timerBegin(0, 80, true);
-    //timerAttachInterrupt(_timer, &PoweredUpController::onTimer, true);
+    timerAttachInterrupt(_timer, &PoweredUpController::onTimer, true);
     timerAlarmWrite(_timer, 1000000, true);
     timerAlarmEnable(_timer);
 
@@ -212,40 +212,45 @@ void PoweredUpController::handle()
         //apply requested values
         if (_requestedRemoteColor != _currentRemoteColor)
         {
-        _myRemote.setLedColor(_requestedRemoteColor);
-        _currentRemoteColor = _requestedRemoteColor;
+            _myRemote.setLedColor(_requestedRemoteColor);
+            _currentRemoteColor = _requestedRemoteColor;
         }
 
         if (_requestedTrainColor != _currentTrainColor)
         {
-        _myHub.setLedColor(_requestedTrainColor);
-        _currentTrainColor = _requestedTrainColor;
+            _myHub.setLedColor(_requestedTrainColor);
+            _currentTrainColor = _requestedTrainColor;
         }
 
         if (_currentSpeed != _requestedSpeed) 
         {
-        //step of +2 or -2 depending on the direction to take
-        int step = 2 * ((_requestedSpeed - _currentSpeed) / abs(_requestedSpeed - _currentSpeed));
-        _currentSpeed += step;
-        _myHub.setMotorSpeed(PoweredUpHub::Port::A, _currentSpeed);
+            //step of +2 or -2 depending on the direction to take
+            int step = 2 * ((_requestedSpeed - _currentSpeed) / abs(_requestedSpeed - _currentSpeed));
+            _currentSpeed += step;
+            _myHub.setMotorSpeed(PoweredUpHub::Port::A, _currentSpeed);
+            Serial.printf("Setting speed to %d\n", _currentSpeed);
         }
 
         if (_requestedServo1Position != _currentServo1Position)
         {
-        _servo.attach(Servo1Pin);
-        _servo.write(_requestedServo1Position);
-        delay(TimeForServoToActivateSwitch);
-        _servo.detach();
-        _currentServo1Position = _requestedServo1Position;
+            Serial.printf("Driving Switch 1 to %d\n", _requestedServo1Position);
+            _servo.attach(Servo1Pin);
+            _servo.write(_requestedServo1Position);
+            delay(TimeForServoToActivateSwitch);
+            _servo.detach();
+            _currentServo1Position = _requestedServo1Position;
+            Serial.printf("Switch 1 driven\n");
         }
 
         if (_requestedServo2Position != _currentServo2Position)
         {
-        _servo.attach(Servo2Pin);
-        _servo.write(_requestedServo2Position);
-        delay(TimeForServoToActivateSwitch);
-        _servo.detach();
-        _currentServo2Position = _requestedServo2Position;
+            Serial.printf("Driving Switch 2 to %d\n", _requestedServo2Position);
+            _servo.attach(Servo2Pin);
+            _servo.write(_requestedServo2Position);
+            delay(TimeForServoToActivateSwitch);
+            _servo.detach();
+            _currentServo2Position = _requestedServo2Position;
+            Serial.printf("Switch 2 driven\n");
         }
     }
 }
