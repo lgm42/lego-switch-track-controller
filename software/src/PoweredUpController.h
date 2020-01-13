@@ -14,6 +14,7 @@ class PoweredUpController
 
         void setup();
         void handle();
+        bool isInitialized() const;
 
     private:
         PoweredUpRemote _myRemote;
@@ -36,10 +37,20 @@ class PoweredUpController
         Color _currentTrainColor;
         Color _requestedTrainColor;
 
+        bool _blink;
+
         static const int SwitchLeftServoPosition = 40;
         static const int SwitchRightServoPosition = 95;
-        static const int Servo1Pin = 4;
-        static const int Servo2Pin = 5;
+        static const int Servo1Pin = 25;
+        static const int Servo2Pin = 32;
+        static const int Light1Pin = 21;
+        static const int Light2Pin = 23;
+        static const int LoopTime = 100;
+        static const int TimeToShutdownSystem = 2000;
+        static const int TimeForServoToActivateSwitch = 500;
+
+        bool checkForConnections();
+        static void IRAM_ATTR onTimer();
 
 };
 
