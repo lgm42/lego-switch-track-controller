@@ -27,15 +27,15 @@
 
 typedef void (*ButtonCallback)(bool isPressed);
 
-typedef enum HubType
+typedef enum 
 {
   BOOST_MOVE_HUB = 2,
   POWERED_UP_HUB = 3,
   POWERED_UP_REMOTE = 4,
   UNKNOWN = 255,
-};
+}HubType;
 
-typedef enum DeviceType
+typedef enum 
 {
   UNDEFINED = 0,
   BASIC_MOTOR = 1,
@@ -47,15 +47,15 @@ typedef enum DeviceType
   BOOST_MOVE_HUB_MOTOR = 39,
   BOOST_TILT = 40,
   POWERED_UP_REMOTE_BUTTON = 55
-};
+}DeviceType;
 
-typedef struct Device
+typedef struct 
 {
     byte PortNumber;
     byte DeviceType;
-};
+}Device;
 
-typedef enum Color
+typedef enum 
 {
   BLACK = 0,
   PINK = 1,
@@ -69,7 +69,7 @@ typedef enum Color
   RED = 9,
   WHITE = 10,
   NONE = 255
-};
+}Color;
 
  static const char *COLOR_STRING[] = {
     "black", "pink", "purple", "blue", "lightblue", "cyan", "green", "yellow", "orange", "red", "white"
