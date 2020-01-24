@@ -15,6 +15,10 @@ class PoweredUpController
         void setup();
         void handle();
         bool isInitialized() const;
+        bool remoteConnected() const;
+        bool hubConnected() const;
+        void setRemoteLed(Color color);
+        void setHubLed(Color color);
 
     private:
         PoweredUpRemote _myRemote;
@@ -22,7 +26,6 @@ class PoweredUpController
         int _currentSpeed;
         int _requestedSpeed;
         bool _isInitialized;
-        hw_timer_t * _timer;
         Servo _servo;
 
         int _currentServo1Position;
@@ -36,8 +39,6 @@ class PoweredUpController
         Color _requestedRemoteColor;
         Color _currentTrainColor;
         Color _requestedTrainColor;
-
-        bool _blink;
 
         static const int SwitchLeftServoPosition = 40;
         static const int SwitchRightServoPosition = 95;

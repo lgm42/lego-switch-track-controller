@@ -604,7 +604,9 @@ void Lpf2Hub::notifyCallback(
     }
 }
 
-Lpf2Hub::Lpf2Hub(){};
+Lpf2Hub::Lpf2Hub() : _isConnecting(false), _isConnected(false), _hubType(UNKNOWN)
+{
+}
 
 /**
  * @brief Init function set the UUIDs and scan for the Hub
@@ -867,7 +869,7 @@ bool Lpf2Hub::connectHub()
  * @brief Retrieve the connection state. The BLE client (ESP32) has found a service with the desired UUID (HUB)
  * If this state is available, you can try to connect to the Hub
  */
-bool Lpf2Hub::isConnecting()
+bool Lpf2Hub::isConnecting() const
 {
     return _isConnecting;
 }
@@ -875,137 +877,137 @@ bool Lpf2Hub::isConnecting()
 /**
  * @brief Retrieve the connection state. The BLE client (ESP32) is connected to the server (HUB)
  */
-bool Lpf2Hub::isConnected()
+bool Lpf2Hub::isConnected() const
 {
     return _isConnected;
 }
 
-int Lpf2Hub::getColor()
+int Lpf2Hub::getColor() const
 {
     return Lpf2HubColor;
 }
 
-double Lpf2Hub::getDistance()
+double Lpf2Hub::getDistance() const
 {
     return Lpf2HubDistance;
 }
 
-int Lpf2Hub::getTachoMotorRotation()
+int Lpf2Hub::getTachoMotorRotation() const
 {
     return Lpf2HubTachoMotorRotation;
 }
 
-int Lpf2Hub::getBoostHubMotorRotation()
+int Lpf2Hub::getBoostHubMotorRotation() const
 {
     return Lpf2HubHubMotorRotation;
 }
 
-int Lpf2Hub::getRssi()
+int Lpf2Hub::getRssi() const
 {
     return Lpf2HubRssi;
 }
 
-int Lpf2Hub::getBatteryLevel()
+int Lpf2Hub::getBatteryLevel() const
 {
     return Lpf2HubBatteryLevel;
 }
 
-int Lpf2Hub::getTiltX()
+int Lpf2Hub::getTiltX() const
 {
     return Lpf2HubTiltX;
 }
 
-int Lpf2Hub::getTiltY()
+int Lpf2Hub::getTiltY() const
 {
     return Lpf2HubTiltY;
 }
 
-int Lpf2Hub::getFirmwareVersionBuild()
+int Lpf2Hub::getFirmwareVersionBuild() const
 {
     return Lpf2HubFirmwareVersionBuild;
 }
 
-int Lpf2Hub::getFirmwareVersionBugfix()
+int Lpf2Hub::getFirmwareVersionBugfix() const
 {
     return Lpf2HubFirmwareVersionBugfix;
 }
 
-int Lpf2Hub::getFirmwareVersionMajor()
+int Lpf2Hub::getFirmwareVersionMajor() const
 {
     return Lpf2HubFirmwareVersionMajor;
 }
 
-int Lpf2Hub::getFirmwareVersionMinor()
+int Lpf2Hub::getFirmwareVersionMinor() const
 {
     return Lpf2HubFirmwareVersionMinor;
 }
 
-int Lpf2Hub::getHardwareVersionBuild()
+int Lpf2Hub::getHardwareVersionBuild() const
 {
     return Lpf2HubHardwareVersionBuild;
 }
 
-int Lpf2Hub::getHardwareVersionBugfix()
+int Lpf2Hub::getHardwareVersionBugfix() const
 {
     return Lpf2HubHardwareVersionBugfix;
 }
 
-int Lpf2Hub::getHardwareVersionMajor()
+int Lpf2Hub::getHardwareVersionMajor() const
 {
     return Lpf2HubHardwareVersionMajor;
 }
 
-int Lpf2Hub::getHardwareVersionMinor()
+int Lpf2Hub::getHardwareVersionMinor() const
 {
     return Lpf2HubHardwareVersionMinor;
 }
 
-HubType Lpf2Hub::getHubType()
+HubType Lpf2Hub::getHubType() const
 {
     return _hubType;
 }
 
-bool Lpf2Hub::isButtonPressed()
-{
+bool Lpf2Hub::isButtonPressed() const
+{ 
     return Lpf2HubHubButtonPressed;
 }
 
-bool Lpf2Hub::isLeftRemoteUpButtonPressed()
+bool Lpf2Hub::isLeftRemoteUpButtonPressed() const
 {
     return Lpf2HubRemoteLeftUpButtonPressed;
 }
 
-bool Lpf2Hub::isLeftRemoteDownButtonPressed()
+bool Lpf2Hub::isLeftRemoteDownButtonPressed() const
 {
     return Lpf2HubRemoteLeftDownButtonPressed;
 }
 
-bool Lpf2Hub::isLeftRemoteStopButtonPressed()
+bool Lpf2Hub::isLeftRemoteStopButtonPressed() const
 {
     return Lpf2HubRemoteLeftStopButtonPressed;
 }
 
-bool Lpf2Hub::isLeftRemoteButtonReleased()
+bool Lpf2Hub::isLeftRemoteButtonReleased() const
 {
     return Lpf2HubRemoteLeftButtonReleased;
 }
 
-bool Lpf2Hub::isRightRemoteUpButtonPressed()
+bool Lpf2Hub::isRightRemoteUpButtonPressed() const
 {
     return Lpf2HubRemoteRightUpButtonPressed;
 }
 
-bool Lpf2Hub::isRightRemoteDownButtonPressed()
+bool Lpf2Hub::isRightRemoteDownButtonPressed() const
 {
     return Lpf2HubRemoteRightDownButtonPressed;
 }
 
-bool Lpf2Hub::isRightRemoteStopButtonPressed()
+bool Lpf2Hub::isRightRemoteStopButtonPressed() const
 {
     return Lpf2HubRemoteRightStopButtonPressed;
 }
 
-bool Lpf2Hub::isRightRemoteButtonReleased()
+bool Lpf2Hub::isRightRemoteButtonReleased() const
 {
     return Lpf2HubRemoteRightButtonReleased;
 }

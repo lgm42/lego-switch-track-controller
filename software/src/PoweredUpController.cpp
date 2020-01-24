@@ -1,42 +1,8 @@
 
 #include "PoweredUpController.h"
 
-#define LED_BUILTIN 22
-
-void IRAM_ATTR PoweredUpController::onTimer() 
-{
-  if (PoweredUpLego._isInitialized) 
-  {
-    //led management
-    if (!PoweredUpLego._myRemote.isLeftRemoteUpButtonPressed() && !PoweredUpLego._myRemote.isLeftRemoteDownButtonPressed() &&
-        !PoweredUpLego._myRemote.isRightRemoteUpButtonPressed() && !PoweredUpLego._myRemote.isRightRemoteDownButtonPressed() && 
-        !PoweredUpLego._myRemote.isLeftRemoteStopButtonPressed() && !PoweredUpLego._myRemote.isRightRemoteStopButtonPressed())
-    {
-      //normal blinking
-      if (PoweredUpLego._blink)
-      {
-        PoweredUpLego._requestedRemoteColor = PURPLE; 
-        PoweredUpLego._requestedTrainColor = PURPLE;
-        digitalWrite(LED_BUILTIN, 1);
-      }
-      else
-      {
-        PoweredUpLego._requestedRemoteColor = BLACK;
-        PoweredUpLego._requestedTrainColor = BLACK; 
-        digitalWrite(LED_BUILTIN, 0);
-      }
-      PoweredUpLego._blink = !PoweredUpLego._blink;   
-    }
-  }
-  else
-  {
-      
-  }
-}
-
-PoweredUpController::PoweredUpController() : _currentSpeed(0), _requestedSpeed(0), _isInitialized(false), _timer(NULL),
-_currentServo1Position(0), _requestedServo1Position(0), _currentServo2Position(0), _requestedServo2Position(0), _waitForButtonRelease(false),
-_blink(false)
+PoweredUpController::PoweredUpController() : _currentSpeed(0), _requestedSpeed(0), _isInitialized(false),
+_currentServo1Position(0), _requestedServo1Position(0), _currentServo2Position(0), _requestedServo2Position(0), _waitForButtonRelease(false)
 {
 }
 
@@ -46,24 +12,39 @@ PoweredUpController::~PoweredUpController()
 
 void PoweredUpController::setup()
 {
+    Serial.println("PoweredUpController setup ...");
     _requestedServo1Position = SwitchLeftServoPosition;
     _requestedServo2Position = SwitchLeftServoPosition;
+
     _myRemote.init(); // initalize the listening hub
     _myHub.init(); // initalize the listening hub
 
-    _timer = timerBegin(0, 80, true);
-    timerAttachInterrupt(_timer, &PoweredUpController::onTimer, true);
-    timerAlarmWrite(_timer, 1000000, true);
-    timerAlarmEnable(_timer);
-
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, 1);
     _onOffButtonCounter = 0;
 }
 
 bool PoweredUpController::isInitialized() const
 {
     return _isInitialized;
+}
+
+bool PoweredUpController::remoteConnected() const
+{
+    return _myRemote.isConnected();
+}
+
+bool PoweredUpController::hubConnected() const
+{
+    return _myHub.isConnected();
+}
+
+void PoweredUpController::setRemoteLed(Color color)
+{
+    _requestedRemoteColor = color;
+}
+
+void PoweredUpController::setHubLed(Color color)
+{
+    _requestedTrainColor = color;
 }
 
 bool PoweredUpController::checkForConnections()
@@ -80,7 +61,6 @@ bool PoweredUpController::checkForConnections()
             }
             else
             {
-                _myRemote.setLedColor(GREEN);
                 Serial.println("Remote connected.");
             }
         }
@@ -91,7 +71,6 @@ bool PoweredUpController::checkForConnections()
         if (_myHub.getHubType() == POWERED_UP_HUB)
         {
             _myHub.connectHub();
-            _myHub.setLedColor(GREEN);
             Serial.println("powered up hub connected.");
         }
     }
@@ -125,31 +104,18 @@ void PoweredUpController::handle()
 {
     if (checkForConnections())
     {
-        //led management
-        if (_myRemote.isLeftRemoteUpButtonPressed() || _myRemote.isLeftRemoteDownButtonPressed())
+        if (_myRemote.isButtonPressed()) //Green button
         {
-            _requestedRemoteColor = GREEN;
-        }
-        else if (_myRemote.isRightRemoteUpButtonPressed() || _myRemote.isRightRemoteDownButtonPressed())
-        {
-            _requestedRemoteColor = BLUE;
-        }
-        else if (_myRemote.isLeftRemoteStopButtonPressed())
-        {
-            _requestedRemoteColor = RED;
-        }
-        else if (_myRemote.isButtonPressed()) //Green button
-        {
-            _requestedRemoteColor = RED;
-            //TODO : remove this shutdown when ON/OFF button is okay
             _onOffButtonCounter++;
             if (_onOffButtonCounter * LoopTime > TimeToShutdownSystem)
             {
+                _myHub.setLedColor(BLACK);
+                _myHub.shutDownHub();
                 _myRemote.setLedColor(BLACK);
                 _myRemote.shutDownHub();
-                _myHub.shutDownHub();
                 _isInitialized = false;
-                while (true);
+                _myHub = PoweredUpHub();
+                _myRemote = PoweredUpRemote();
             }
         }
         else
